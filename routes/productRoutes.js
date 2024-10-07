@@ -1,21 +1,13 @@
 const express = require('express');
 const multer = require('multer');
-const { uploadImage } = require('../controllers/productController');
-
+const path = require('path');
+const productController = require('../controllers/productController');
 const router = express.Router();
-// ตั้งคKา multer สําหรับจัดการไฟลgอัปโหลด
-const storage = multer.diskStorage({
-destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-},
-filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-},
-});
-
+//สร8างการอัพโหลดไฟลg
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // กําหนดเส8นทางสําหรับอัปโหลดภาพ
-router.post('/upload', upload.single('image'), uploadImage);
-
+router.post('/upload', upload.single('image'), productController.uploadImage);
+router.get('/products', productController.getdata);
 module.exports = router;
